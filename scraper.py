@@ -8,6 +8,7 @@
 
 import asyncio
 import json
+import os
 from datetime import datetime
 from pathlib import Path
 
@@ -157,8 +158,9 @@ async def main() -> None:
     seen_titles: set[str] = set()   # 跨搜尋去重：記錄已抓過的商品標題
 
     async with async_playwright() as pw:
+        is_ci = os.environ.get("CI") == "true"
         browser = await pw.chromium.launch(
-            headless=False,           # 本地測試開著看；GitHub Actions 改 True
+            headless=is_ci,
             args=["--no-sandbox", "--disable-dev-shm-usage"],
         )
         ctx = await browser.new_context(
