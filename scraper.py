@@ -23,7 +23,7 @@ SEARCHES = [
     },
     {
         "label": "老婆",
-        "url": "https://www.ruten.com.tw/event/ichiban_search.php/?q=%E8%80%81%E5%A9%86",
+        "url": "https://www.ruten.com.tw/event/ichiban_search.php/?q=%E5%A9%86",
         "skip_keywords": [],
     },
 ]
