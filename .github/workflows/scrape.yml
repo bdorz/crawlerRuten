@@ -1,0 +1,61 @@
+name: 一抽露魂巡測
+
+on:
+  schedule:
+    # 每天台灣時間晚上 21:00（UTC 13:00）自動執行
+    - cron: "0 13 * * *"
+  workflow_dispatch:  # 允許手動觸發
+
+permissions:
+  contents: write   # 允許 commit result.html 回 repo
+  pages: write      # 允許部署 GitHub Pages
+  id-token: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install chromium --with-deps
+
+      - name: Run scraper
+        run: python scraper.py
+
+      - name: Commit result.html
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add result.html
+          git diff --staged --quiet || git commit -m "chore: update scrape results $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push
+
+      # ── 選用：部署到 GitHub Pages 讓你直接用瀏覽器看 ──
+      # 要啟用：到 repo Settings → Pages → Source 選 "GitHub Actions"
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "."   # 上傳整個目錄（包含 result.html）
+
+  deploy-pages:
+    needs: scrape
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,3 @@
+debug_*.html
+__pycache__/
+*.pyc

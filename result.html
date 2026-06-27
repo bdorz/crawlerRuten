@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>一抽露魂分析 2026-06-27 11:59</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#243147;--border:#2d3f58;
+  --text:#e2e8f0;--text2:#7f96b4;--accent:#e63946;
+  --green:#22c55e;--yellow:#f59e0b;--red:#ef4444;--blue:#60a5fa;
+  --font:system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px}
+
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:18px 24px}
+header h1{font-size:20px;font-weight:700;color:var(--accent)}
+header p{color:var(--text2);font-size:12px;margin-top:3px}
+.stats{display:flex;gap:16px;margin-top:14px;flex-wrap:wrap}
+.stat{background:var(--surface2);border-radius:8px;padding:8px 16px}
+.stat-val{font-size:20px;font-weight:700;color:var(--accent)}
+.stat-label{font-size:11px;color:var(--text2);margin-top:1px}
+
+.controls{padding:12px 24px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;
+           border-bottom:1px solid var(--border);background:var(--surface)}
+.controls input{background:var(--bg);border:1px solid var(--border);color:var(--text);
+  padding:6px 12px;border-radius:6px;font-size:13px;width:220px}
+.controls input:focus{outline:none;border-color:var(--accent)}
+.tag{background:var(--surface2);border:1px solid var(--border);color:var(--text2);
+  padding:5px 12px;border-radius:6px;cursor:pointer;font-size:12px;transition:all .15s;white-space:nowrap}
+.tag.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.sep{width:1px;height:24px;background:var(--border);margin:0 4px}
+
+.wrap{overflow-x:auto;padding:0 24px 32px}
+table{width:100%;border-collapse:collapse;margin-top:14px;min-width:780px}
+th{background:var(--surface);color:var(--text2);font-size:11px;text-transform:uppercase;
+  letter-spacing:.05em;padding:9px 12px;text-align:left;border-bottom:2px solid var(--border);
+  white-space:nowrap;cursor:pointer;user-select:none}
+th:hover{color:var(--text)}
+th.asc::after{content:" ↑";color:var(--accent)}
+th.desc::after{content:" ↓";color:var(--accent)}
+td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr.prow{cursor:pointer;transition:background .1s}
+tr.prow:hover{background:var(--surface2)}
+tr.drow{display:none;background:var(--surface2)}
+tr.drow.open{display:table-row}
+
+.badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:11px;font-weight:600}
+.badge-女神{background:#7c3aed22;color:#c4b5fd;border:1px solid #7c3aed55}
+.badge-老婆{background:#be185d22;color:#f9a8d4;border:1px solid #be185d55}
+.badge-尚有大賞{background:#f59e0b22;color:#fcd34d;border:1px solid #f59e0b55}
+.badge-大賞齊全{background:#22c55e22;color:#86efac;border:1px solid #22c55e55}
+
+.pname a{color:var(--text);text-decoration:none;font-weight:500}
+.pname a:hover{color:var(--accent)}
+.arrow{float:right;color:var(--text2);transition:transform .2s;font-style:normal}
+tr.prow.open .arrow{transform:rotate(180deg)}
+
+.pct{font-weight:600}
+.pct-high{color:var(--green)}
+.pct-mid{color:var(--yellow)}
+.pct-low{color:var(--red)}
+.pct-none{color:var(--text2)}
+
+.price-val{font-weight:600}
+.price-cheap{color:var(--green)}
+.price-mid{color:var(--yellow)}
+.price-exp{color:var(--red)}
+
+.rem-bar-wrap{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2)}
+.rem-bar-bg{background:var(--border);border-radius:3px;width:80px;height:6px;overflow:hidden}
+.rem-bar{height:6px;border-radius:3px;background:var(--blue)}
+
+/* 展開的賞品明細 */
+.detail-inner{padding:16px 20px}
+.detail-inner h4{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+.prize-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.prize-card{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px}
+.prize-card-low{opacity:.6;border-style:dashed}
+.prize-tier{display:inline-block;font-size:10px;font-weight:700;padding:1px 6px;border-radius:3px;
+  margin-bottom:4px;background:var(--accent)22;color:var(--accent);border:1px solid var(--accent)44}
+.prize-tier-low{background:#33415522;color:var(--text2);border-color:#33415566}
+.prize-name{font-size:12px;color:var(--text2);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prize-prob{font-size:15px;font-weight:700}
+.prize-qty{font-size:11px;color:var(--text2);margin-top:2px}
+.prob-bar-bg{background:var(--border);border-radius:3px;height:5px;margin-top:5px;overflow:hidden}
+.prob-bar{height:5px;border-radius:3px}
+.gone-note{font-size:11px;color:var(--text2);margin-bottom:8px;padding:4px 8px;
+  background:var(--surface);border-radius:4px;display:inline-block}
+.best-banner{display:flex;align-items:center;gap:12px;margin-bottom:12px;
+  padding:10px 14px;background:linear-gradient(90deg,#1e3a5f,#1e293b);
+  border:1px solid #3b82f655;border-radius:8px;flex-wrap:wrap}
+.best-banner .best-label{font-size:11px;color:var(--text2);white-space:nowrap}
+.best-banner .best-tier{font-size:12px;font-weight:700;padding:2px 8px;border-radius:4px;
+  background:var(--accent)22;color:var(--accent);border:1px solid var(--accent)44}
+.best-banner .best-name{font-size:13px;font-weight:500;color:var(--text);flex:1;min-width:0;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.best-banner .best-prob{font-size:18px;font-weight:700;color:var(--green);white-space:nowrap}
+.best-banner .best-price{font-size:12px;color:var(--text2);white-space:nowrap}
+
+.empty{padding:48px;text-align:center;color:var(--text2)}
+.no-prize{color:var(--text2);font-size:12px;font-style:italic}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>一抽露魂 機率分析</h1>
+  <p>更新時間：2026-06-27 11:59　只顯示「尚有大賞」與「大賞齊全」商品</p>
+  <div class="stats" id="statsRow"></div>
+</header>
+
+<div class="controls">
+  <input id="q" placeholder="搜尋商品名稱...">
+  <div class="sep"></div>
+  <span style="color:var(--text2);font-size:12px">大賞：</span>
+  <button class="tag on" data-f="badge" data-v="all">全部</button>
+  <button class="tag" data-f="badge" data-v="尚有大賞">尚有大賞</button>
+  <button class="tag" data-f="badge" data-v="大賞齊全">大賞齊全</button>
+</div>
+
+<div class="wrap">
+<table id="tbl">
+  <thead><tr>
+    <th>來源</th>
+    <th>商品名稱</th>
+    <th data-col="price">單抽價格</th>
+    <th data-col="rem">剩餘抽數</th>
+    <th data-col="remPct">剩餘%</th>
+    <th data-col="topProb">大賞機率</th>
+    <th data-col="origProb">開套機率</th>
+    <th>狀態</th>
+  </tr></thead>
+  <tbody id="tbody"></tbody>
+</table>
+<div class="empty" id="empty" style="display:none">沒有符合條件的商品</div>
+</div>
+
+<script>
+const DATA = [{"source": "女神", "name": "【誠格一番】女神福利抽 大集合1 約會大作戰 時崎狂三 幻塔 凛夜 原畫 羽根露娜 星宮六喰 泳裝 D1", "price": 99, "url": "https://www.ruten.com.tw/item/52626960008438/", "img": "", "badge": "大賞齊全", "remaining": 158, "totalPulls": 158, "prizes": [{"tier": "A賞", "name": "原畫 羽根露娜 1/6 *1個", "prob": 0.63, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "B賞", "name": "幻塔 凛夜 1/7 *1個", "prob": 0.63, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "C賞", "name": "星宮六喰 泳裝 *1個", "prob": 1.27, "qty": 2, "qtyTotal": 2, "isSoldOut": false}, {"tier": "D賞", "name": "約會大作戰 時崎狂三 1/7 PVC *1個", "prob": 1.27, "qty": 2, "qtyTotal": 2, "isSoldOut": false}, {"tier": "E賞", "name": "hololive卡牌(閃 或 普) *1張", "prob": 96.2, "qty": 152, "qtyTotal": 152, "isSoldOut": false}], "parsedOk": true}, {"source": "女神", "name": "【幫主子賺罐罐】女神大亂鬥 快來找老婆", "price": 380, "url": "https://www.ruten.com.tw/item/52625915877431/", "img": "", "badge": "大賞齊全", "remaining": 120, "totalPulls": 140, "prizes": [{"tier": "A賞", "name": "放置少女 無雙上將 剛起床 UR造型 潘鳳 PVC", "prob": 0.83, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "B賞", "name": "GSC 不起眼女主角培育法 加藤惠 Animation 1/4", "prob": 0.83, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "C賞", "name": "HobbySakura 1/7 勝利女神:妮姬 伊莎貝爾 蜜月派對", "prob": 0.83, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "D賞", "name": "YOYOSKY 避暑的體操服JK少女 1/6 PVC", "prob": 0.83, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "E賞", "name": "Eclipse Collectibles 高潔的修女 格蕾絲 Grace 1/7", "prob": 0.83, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "F賞", "name": "隨機絨毛吊飾一款", "prob": 4.17, "qty": 5, "qtyTotal": 5, "isSoldOut": false}, {"tier": "G賞", "name": "不限IP小賞一款(資料夾 杯子 吊飾 毛巾 海報)", "prob": 91.67, "qty": 110, "qtyTotal": 130, "isSoldOut": false}], "parsedOk": true}, {"source": "女神", "name": "【幫主子賺罐罐】老婆爽爽抽 女神都在這 碧藍航線篇Vol2", "price": 430, "url": "https://www.ruten.com.tw/item/52624888941093/", "img": "", "badge": "尚有大賞", "remaining": 148, "totalPulls": 160, "prizes": [{"tier": "A賞", "name": "ALTER 碧藍航線 格拉夫·齊柏林 沙灘的烏爾德ver 1/7", "prob": 0.68, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "B賞", "name": "ALTER 碧藍航線 吾妻 細雨春霞 重裝Ver 1/7", "prob": 0, "qty": 0, "qtyTotal": 1, "isSoldOut": true}, {"tier": "C賞", "name": "Claynel 碧藍航線 可畏 甜蜜時光Ver 1/6", "prob": 0.68, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "D賞", "name": "NEONMAX 特典版 碧藍航線 定安 輕裝Ver 1/7", "prob": 0.68, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "E賞", "name": "ALTER  碧藍航線 高雄 至高焦點 1/7", "prob": 0.68, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "F賞", "name": "隨機景品一款", "prob": 3.38, "qty": 5, "qtyTotal": 5, "isSoldOut": false}, {"tier": "G賞", "name": "不限IP小賞一款(資料夾 杯子 吊飾 毛巾)", "prob": 93.92, "qty": 139, "qtyTotal": 150, "isSoldOut": false}], "parsedOk": true}, {"source": "女神", "name": "【幫主子賺罐罐】老婆爽爽抽 女神都在這 泳裝特輯Vol2", "price": 380, "url": "https://www.ruten.com.tw/item/52624861400038/", "img": "", "badge": "大賞齊全", "remaining": 140, "totalPulls": 150, "prizes": [{"tier": "A賞", "name": "壽屋 Megami Device 女神裝置 朱羅 蒼衣 翠2/1", "prob": 0.71, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "B賞", "name": "GSC 碧藍航線 柴郡 約會之夏 1/7", "prob": 0.71, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "C賞", "name": "GSC 1/7 勝利女神：妮姬 拉毗：經典假期 PVC", "prob": 0.71, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "D賞", "name": "箱入り娘 1/7 出租女友 水原千鶴 女僕比基尼換裝中", "prob": 0.71, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "E賞", "name": "BearPanda K pring 小百合 兔女郎 真絲襪 溫感漆 追視眼 1/4", "prob": 0.71, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "F賞", "name": "隨機景品一款", "prob": 3.57, "qty": 5, "qtyTotal": 5, "isSoldOut": false}, {"tier": "G賞", "name": "不限IP小賞一款(資料夾 杯子 吊飾 毛巾)", "prob": 92.86, "qty": 130, "qtyTotal": 140, "isSoldOut": false}], "parsedOk": true}, {"source": "女神", "name": "【幫主子賺罐罐】老婆爽爽抽 女神都在這 泳裝特輯", "price": 390, "url": "https://www.ruten.com.tw/item/52623828141267/", "img": "", "badge": "尚有大賞", "remaining": 74, "totalPulls": 120, "prizes": [{"tier": "A賞", "name": "ALUMINA ピロ水 害羞女友 來海志乃羽 1/7", "prob": 1.35, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "B賞", "name": "Good Smile 1/7 hololive 白銀諾艾爾 泳裝Ver.", "prob": 0, "qty": 0, "qtyTotal": 1, "isSoldOut": true}, {"tier": "C賞", "name": "Wonderful Works 1/7 toridamono原創 Mira Sunset Ver.", "prob": 1.35, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "D賞", "name": "ALTER 碧藍航線 波拉 水邊的事故 1/7", "prob": 1.35, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "E賞", "name": "1/6 魅魔 風紀委員 澪奈", "prob": 0, "qty": 0, "qtyTotal": 1, "isSoldOut": true}, {"tier": "F賞", "name": "隨機景品一款", "prob": 5.41, "qty": 4, "qtyTotal": 5, "isSoldOut": false}, {"tier": "G賞", "name": "不限IP小賞一款(資料夾 畫板 吊飾 毛巾)", "prob": 90.54, "qty": 67, "qtyTotal": 110, "isSoldOut": false}], "parsedOk": true}, {"source": "女神", "name": "【三隻貓卡遊】碧藍航線 女神福利抽 歐根親王 永不褪色的笑容 雅努斯 躊躇換衣時間 海倫娜 耀眼的波紋 雲仙 嬉水 Z1", "price": 99, "url": "https://www.ruten.com.tw/item/52623822496725/", "img": "", "badge": "尚有大賞", "remaining": 239, "totalPulls": 292, "prizes": [{"tier": "A賞", "name": "WAVE 碧藍航線 歐根親王 永不褪色的笑容 1/8 PVC *1個", "prob": 0, "qty": 0, "qtyTotal": 1, "isSoldOut": true}, {"tier": "B賞", "name": "Myethos Gift+ 碧藍航線 海倫娜 耀眼的波紋 1/8 PVC *1個", "prob": 0, "qty": 0, "qtyTotal": 1, "isSoldOut": true}, {"tier": "C賞", "name": "Myethos Gift+ 碧藍航線 雲仙 嬉水碧海 1/8 PVC *1個", "prob": 0.42, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "D賞", "name": "Myethos Gift+ 碧藍航線 雅努斯 躊躇的換衣時間 1/8 PVC *1個", "prob": 0.42, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "E賞", "name": "WAVE 碧藍航線-歐根親王手辦-特典色紙 *1個 (只有特典)", "prob": 0.42, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "F賞", "name": "碧藍航線卡牌(閃 或 普) *1張", "prob": 98.74, "qty": 236, "qtyTotal": 287, "isSoldOut": false}], "parsedOk": true}, {"source": "女神", "name": "【幫主子賺罐罐】老婆爽爽抽 女神都在這 Vol19", "price": 400, "url": "https://www.ruten.com.tw/item/52621765837469/", "img": "", "badge": "尚有大賞", "remaining": 42, "totalPulls": 120, "prizes": [{"tier": "A賞", "name": "ALTER 碧藍航線 聖路易斯 Luxury Handle Ver 1/6", "prob": 0, "qty": 0, "qtyTotal": 1, "isSoldOut": true}, {"tier": "B賞", "name": "APEX 碧藍航線 可畏 插畫Ver. 1/7", "prob": 0, "qty": 0, "qtyTotal": 1, "isSoldOut": true}, {"tier": "C賞", "name": "APEX 碧藍航線 奇爾沙治 Allnight Charge 1/7", "prob": 2.38, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "D賞", "name": "尺玉 ぷぅ崎ぷぅ奈 原畫 雪乃深冬 PVC", "prob": 0, "qty": 0, "qtyTotal": 1, "isSoldOut": true}, {"tier": "E賞", "name": "大漫匠 Animester 1/6 營業第一天!溫柔的店員花宮茉莉", "prob": 0, "qty": 0, "qtyTotal": 2, "isSoldOut": true}, {"tier": "F賞", "name": "隨機景品一款", "prob": 2.38, "qty": 1, "qtyTotal": 5, "isSoldOut": false}, {"tier": "G賞", "name": "不限IP小賞一款(資料夾 杯子 吊飾 毛巾 畫板)", "prob": 95.24, "qty": 40, "qtyTotal": 109, "isSoldOut": false}], "parsedOk": true}, {"source": "女神", "name": "【幫主子賺罐罐】老婆爽爽抽 女神都在這 Vol18", "price": 380, "url": "https://www.ruten.com.tw/item/52621745079960/", "img": "", "badge": "尚有大賞", "remaining": 47, "totalPulls": 120, "prizes": [{"tier": "A賞", "name": "GSC 勝利女神 妮姬 NIKKE 布蘭兒 白兔 1/7", "prob": 0, "qty": 0, "qtyTotal": 1, "isSoldOut": true}, {"tier": "B賞", "name": "F:NEX Nachoneko 甘城なつき 新裝Ver 1/7", "prob": 2.13, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "C賞", "name": "APEX 碧藍航線 紐澤西 花園 聯動插畫Ver 1/7", "prob": 0, "qty": 0, "qtyTotal": 1, "isSoldOut": true}, {"tier": "D賞", "name": "Apocrypha Toy 褐色舞娘 原畫 铃雨やつみ 1/6", "prob": 0, "qty": 0, "qtyTotal": 1, "isSoldOut": true}, {"tier": "E賞", "name": "AniMester 東灘 兔女郎 1/6", "prob": 0, "qty": 0, "qtyTotal": 2, "isSoldOut": true}, {"tier": "F賞", "name": "隨機景品一款", "prob": 6.38, "qty": 3, "qtyTotal": 5, "isSoldOut": false}, {"tier": "G賞", "name": "不限IP小賞一款(資料夾 杯子 吊飾 毛巾)", "prob": 91.49, "qty": 43, "qtyTotal": 109, "isSoldOut": false}], "parsedOk": true}, {"source": "女神", "name": "【幫主子賺罐罐】老婆爽爽抽 女神都在這 Vol17", "price": 320, "url": "https://www.ruten.com.tw/item/52619635460329/", "img": "", "badge": "尚有大賞", "remaining": 197, "totalPulls": 220, "prizes": [{"tier": "A賞", "name": "APEX 1/7 碧藍航線 烏爾里克·馮·胡貝爾 一騎絕塵Ver", "prob": 0.51, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "B賞", "name": "ACTOYS 碧藍航線 埃吉爾 1/7 輕裝Ver", "prob": 0, "qty": 0, "qtyTotal": 1, "isSoldOut": true}, {"tier": "C賞", "name": "AliceGlint 1/7 PVC人形 碧藍航線 凱爾聖陽光下的跑者", "prob": 0.51, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "D賞", "name": "1/7 尼爾：自動人形 Ver1.1a 2B", "prob": 0.51, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "E賞", "name": "BearPanda K pring 小百合 兔女郎 真絲襪 溫感漆 追視眼 1/4", "prob": 1.02, "qty": 2, "qtyTotal": 2, "isSoldOut": false}, {"tier": "F賞", "name": "隨機景品一款", "prob": 2.54, "qty": 5, "qtyTotal": 5, "isSoldOut": false}, {"tier": "G賞", "name": "不限IP小賞一款(資料夾 杯子 吊飾 毛巾)", "prob": 94.92, "qty": 187, "qtyTotal": 209, "isSoldOut": false}], "parsedOk": true}, {"source": "老婆", "name": "【番魂社】老婆補完計畫3", "price": 420, "url": "https://www.ruten.com.tw/item/52625919488499/", "img": "", "badge": "尚有大賞", "remaining": 113, "totalPulls": 250, "prizes": [{"tier": "A賞", "name": "B-style 碧藍航線 伏羅希洛夫 「雪景溫暖，我的心屬於你」", "prob": 0, "qty": 0, "qtyTotal": 1, "isSoldOut": true}, {"tier": "B賞", "name": "1/7【約會大作戰DATE A BULLET 赤黑新章】白色女王 -DX版", "prob": 0, "qty": 0, "qtyTotal": 1, "isSoldOut": true}, {"tier": "C賞", "name": "原神 エウルア 波沫のワルツVer. 1/7", "prob": 0, "qty": 0, "qtyTotal": 1, "isSoldOut": true}, {"tier": "D賞", "name": "Echocalypse -緋紅の神約- レビヤタン ・ しなやかな百合の姿態ver. 1/7", "prob": 0, "qty": 0, "qtyTotal": 1, "isSoldOut": true}, {"tier": "E賞", "name": "Hanabee 碧藍航線 巴爾的摩 Black Ace 1/6", "prob": 0.88, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "F賞", "name": "FREEIng - 1/4《食戟之靈》薙切繪里奈", "prob": 0.88, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "G賞", "name": "絨毛吊飾 隨機一款", "prob": 0.88, "qty": 1, "qtyTotal": 5, "isSoldOut": false}, {"tier": "H賞", "name": "遊戲王卡牌(閃卡 或 普卡)隨機 *2張", "prob": 97.35, "qty": 110, "qtyTotal": 239, "isSoldOut": false}], "parsedOk": true}, {"source": "老婆", "name": "【番魂社】老婆補完計劃2", "price": 450, "url": "https://www.ruten.com.tw/item/52624863149221/", "img": "", "badge": "尚有大賞", "remaining": 225, "totalPulls": 250, "prizes": [{"tier": "A賞", "name": "女僕屋「害羞女友」日影千條 1/6", "prob": 0.44, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "B賞", "name": "Fate/Grand Order Foreigner/楊貴妃 英靈服裝版 1/7", "prob": 0.44, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "C賞", "name": "勝利女神：NIKKE 海藍寶石 1/4", "prob": 0.44, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "D賞", "name": "ALTER 1/7 Fate/Grand Order Berserker 清少納言", "prob": 0, "qty": 0, "qtyTotal": 1, "isSoldOut": true}, {"tier": "E賞", "name": "ALTER 1/7 蔚藍檔案 飛鳥馬季 兔女郎 回憶大廳", "prob": 0.44, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "F賞", "name": "Freyja 貓咪的心思 1/4", "prob": 0.44, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "G賞", "name": "GoldenHead 1/7 FreeStyle 先生原創插畫 Warehouse 蒼子", "prob": 0.44, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "H賞", "name": "絨毛吊飾 不限IP隨機一款", "prob": 1.78, "qty": 4, "qtyTotal": 5, "isSoldOut": false}, {"tier": "I賞", "name": "遊戲王卡牌(閃卡 或 普卡)隨機 *2張", "prob": 95.56, "qty": 215, "qtyTotal": 238, "isSoldOut": false}], "parsedOk": true}, {"source": "老婆", "name": "【番魂社】老婆補完計畫 開補!", "price": 380, "url": "https://www.ruten.com.tw/item/52622782656019/", "img": "", "badge": "尚有大賞", "remaining": 117, "totalPulls": 160, "prizes": [{"tier": "A賞", "name": "Claynel 碧藍航線 可畏 甜蜜時光Ver 1/6", "prob": 0, "qty": 0, "qtyTotal": 1, "isSoldOut": true}, {"tier": "B賞", "name": "GSC 勝利女神 妮姬 NIKKE 布蘭兒 白兔 1/7", "prob": 0, "qty": 0, "qtyTotal": 1, "isSoldOut": true}, {"tier": "C賞", "name": "APEX 碧藍航線 可畏 插畫Ver. 1/7", "prob": 0.85, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "D賞", "name": "尺玉 ぷぅ崎ぷぅ奈 原畫 雪乃深冬", "prob": 0.85, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "E賞", "name": "APEX 崩壞 星穹鐵道 卡芙卡 1/7 附特典(色紙)", "prob": 0.85, "qty": 1, "qtyTotal": 1, "isSoldOut": false}, {"tier": "F賞", "name": "景品 不限IP隨機一款", "prob": 3.42, "qty": 4, "qtyTotal": 5, "isSoldOut": false}, {"tier": "G賞", "name": "遊戲王卡牌(閃卡 或 普卡)隨機 *2張", "prob": 94.02, "qty": 110, "qtyTotal": 150, "isSoldOut": false}], "parsedOk": true}, {"source": "老婆", "name": "【模殿】S.H.Figuarts 老婆祭 蕾潔 芙莉蓮 渡我", "price": 175, "url": "https://www.ruten.com.tw/item/52619648973366/", "img": "", "badge": "大賞齊全", "remaining": 293, "totalPulls": 300, "prizes": [{"tier": "A賞", "name": "S.H.F 鏈鋸人 蕾潔篇 蕾潔", "prob": 1.71, "qty": 5, "qtyTotal": 6, "isSoldOut": false}, {"tier": "B賞", "name": "S.H.F 葬送的芙莉蓮 芙莉蓮", "prob": 1.02, "qty": 3, "qtyTotal": 3, "isSoldOut": false}, {"tier": "C賞", "name": "S.H.F 我的英雄學院 渡我被身子", "prob": 0.68, "qty": 2, "qtyTotal": 2, "isSoldOut": false}, {"tier": "D賞", "name": "隨機IP一番賞小賞", "prob": 96.59, "qty": 283, "qtyTotal": 289, "isSoldOut": false}], "parsedOk": true}];
+
+/* ─ 賞品分類 ─
+   低賞判定：名稱含「景品」OR 機率 > 50%（G賞類大量隨機填充賞）
+   已抽完：isSoldOut === true OR prob === 0 OR qty === 0 */
+function categorizePrizes(prizes) {
+  if (!prizes?.length) return { main:[], low:[], gone:[], lowProb:0, lowTiers:'' };
+  const gone = prizes.filter(p => p.isSoldOut || p.prob === 0 || p.qty === 0);
+  const live = prizes.filter(p => !p.isSoldOut && p.prob > 0 && p.qty !== 0);
+  const isLow = p => p.name.includes('景品') || p.name.includes('絨毛') || p.prob > 50;
+  const low   = live.filter(p => isLow(p));
+  const main  = live.filter(p => !isLow(p));
+  const lowProb  = +low.reduce((s,p) => s+p.prob, 0).toFixed(2);
+  const lowTiers = low.map(p=>p.tier).join('+');
+  return { main, low, gone, lowProb, lowTiers };
+}
+
+/* ─ 工具 ─ */
+const pctClass  = p => p===null?'pct-none':p>=5?'pct-high':p>=2?'pct-mid':'pct-low';
+const priceClass = p => !p?'':p<=150?'price-cheap':p<=300?'price-mid':'price-exp';
+const probColor  = p => p>=5?'#22c55e':p>=2?'#f59e0b':'#ef4444';
+const remPct     = d => (d.remaining!=null&&d.totalPulls) ? d.remaining/d.totalPulls*100 : null;
+
+// 大賞機率 = 所有主賞機率加總（排除低賞 / 已抽完）
+function topProb(d) {
+  const { main } = categorizePrizes(d.prizes);
+  if (!main.length) return null;
+  return +main.reduce((s,p) => s+p.prob, 0).toFixed(2);
+}
+
+// 個別主賞中機率最高的那一項
+function bestPrize(d) {
+  const { main } = categorizePrizes(d.prizes);
+  if (!main.length) return null;
+  return main.reduce((a,b) => b.prob > a.prob ? b : a, main[0]);
+}
+
+// 開套大獎機率 = 以 qtyTotal/totalPulls 算出的原始機率加總（排除景品/絨毛/高機率低賞）
+function origTopProb(d) {
+  if (!d.totalPulls) return null;
+  const main = d.prizes.filter(p => {
+    if (!p.qtyTotal) return false;
+    const op = p.qtyTotal / d.totalPulls * 100;
+    return !p.name.includes('景品') && !p.name.includes('絨毛') && op <= 50;
+  });
+  if (!main.length) return null;
+  return +(main.reduce((s,p) => s + p.qtyTotal / d.totalPulls * 100, 0)).toFixed(2);
+}
+
+/* ─ 統計列 ─ */
+function renderStats(items) {
+  const prices = items.map(d=>d.price).filter(Boolean);
+  const avgP   = prices.length ? Math.round(prices.reduce((a,b)=>a+b,0)/prices.length) : '—';
+
+  // CP最佳 = 大賞機率(%) ÷ 單抽價格 最高者
+  const withCP = items.filter(d => topProb(d) && d.price);
+  let cpHtml = '<span style="color:var(--text2);font-size:13px">—</span>';
+  if (withCP.length) {
+    const best = withCP.reduce((a,b) =>
+      (topProb(b)/b.price) > (topProb(a)/a.price) ? b : a, withCP[0]);
+    const prob  = topProb(best);
+    const ratio = (prob / best.price * 100).toFixed(3);  // % per NT$100
+    cpHtml = `<a href="${best.url}" target="_blank"
+        style="color:var(--green);text-decoration:none;display:block;line-height:1.3">
+        <span style="font-size:18px;font-weight:700">${prob}%</span>
+        <span style="font-size:12px;color:var(--text2)"> @ NT$${best.price}</span><br>
+        <span style="font-size:11px;color:var(--text2)">${best.name.substring(0,22)}...</span>
+      </a>`;
+  }
+
+  document.getElementById('statsRow').innerHTML =
+    `<div class="stat"><div class="stat-val">${items.length}</div><div class="stat-label">商品數</div></div>`+
+    `<div class="stat"><div class="stat-val">NT$${avgP}</div><div class="stat-label">平均單抽</div></div>`+
+    `<div class="stat" style="min-width:200px"><div class="stat-label" style="margin-bottom:4px">CP最佳商品</div>${cpHtml}</div>`+
+    `<div class="stat"><div class="stat-val">${items.filter(d=>d.parsedOk).length}</div><div class="stat-label">已解析賞項</div></div>`;
+}
+
+/* ─ 列渲染 ─ */
+function renderRows(items) {
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML='';
+  document.getElementById('empty').style.display = items.length?'none':'block';
+  renderStats(items);
+
+  items.forEach(item => {
+    const tp  = topProb(item);
+    const op  = origTopProb(item);
+    const tpWins = tp !== null && op !== null && tp > op;
+    const opWins = op !== null && tp !== null && op > tp;
+    const rp  = remPct(item);
+    const bar = rp!==null ? Math.round(rp) : 0;
+
+    // ── 賞品卡片（分主賞 / 低賞合計 / 已抽完提示）
+    const { main, low, gone, lowProb, lowTiers } = categorizePrizes(item.prizes);
+
+    const mkCard = (p, isLow=false) => {
+      const bw = Math.min(100, Math.max(3, Math.round(p.prob * 1.5)));
+      return `<div class="prize-card${isLow?' prize-card-low':''}">
+        <div class="prize-tier${isLow?' prize-tier-low':{}}">${p.tier}</div>
+        <div class="prize-name" title="${p.name}">${p.name||'—'}</div>
+        <div class="prize-prob ${pctClass(p.prob)}">${p.prob}%</div>
+        <div class="prize-qty">${p.qty!=null?p.qty+' / '+p.qtyTotal+' 件':''}</div>
+        <div class="prob-bar-bg"><div class="prob-bar" style="width:${bw}%;background:${probColor(p.prob)}"></div></div>
+      </div>`;
+    };
+
+    const mainCards = main.map(p => mkCard(p)).join('');
+    const lowCard   = low.length ? `<div class="prize-card prize-card-low">
+        <div class="prize-tier prize-tier-low">${lowTiers||'低賞'}</div>
+        <div class="prize-name">景品 / 隨機低賞（${low.length} 種合計）</div>
+        <div class="prize-prob pct-none">${lowProb}%</div>
+        <div class="prize-qty">&nbsp;</div>
+        <div class="prob-bar-bg"><div class="prob-bar" style="width:${Math.min(100,lowProb)}%;background:#475569"></div></div>
+      </div>` : '';
+    const goneNote  = gone.length
+      ? `<div class="gone-note">已抽完：${gone.map(p=>p.tier).join('、')}</div>` : '';
+    // 最佳賞 banner（主賞中機率最高者 + 本商品單抽價格）
+    const bp = bestPrize(item);
+    const bestBanner = bp ? `<div class="best-banner">
+      <span class="best-label">最佳大賞</span>
+      <span class="best-tier">${bp.tier}</span>
+      <span class="best-name">${bp.name}</span>
+      <span class="best-prob">${bp.prob}%</span>
+      <span class="best-price">${item.price ? 'NT$'+item.price+' / 抽' : ''}</span>
+    </div>` : '';
+
+    const prizeGrid = `${bestBanner}${goneNote}<div class="prize-grid">${mainCards}${lowCard}</div>`;
+
+    const prow = document.createElement('tr');
+    prow.className = 'prow';
+    prow.innerHTML = `
+      <td>
+        <span class="badge badge-${item.source}">${item.source}</span><br>
+        <span class="badge badge-${item.badge}" style="margin-top:3px">${item.badge}</span>
+      </td>
+      <td class="pname">
+        <i class="arrow">▾</i>
+        <a href="${item.url}" target="_blank" onclick="event.stopPropagation()">${item.name.substring(0,55)}</a>
+      </td>
+      <td><span class="price-val ${priceClass(item.price)}">${item.price?'NT$'+item.price:'—'}</span></td>
+      <td>${item.remaining!=null?item.remaining+' / '+item.totalPulls:'—'}</td>
+      <td>
+        ${rp!==null?`<div class="rem-bar-wrap">
+          <span style="min-width:34px">${rp.toFixed(0)}%</span>
+          <div class="rem-bar-bg"><div class="rem-bar" style="width:${bar}%"></div></div>
+        </div>`:'—'}
+      </td>
+      <td>${tp!==null?`<span class="pct ${pctClass(tp)}" style="${tpWins?'font-weight:800;text-shadow:0 0 8px currentColor':opWins?'opacity:.55':''}">${tp}%</span>`:'<span class="pct-none">—</span>'}</td>
+      <td>${op!==null?`<span class="pct ${pctClass(op)}" style="${opWins?'font-weight:800;text-shadow:0 0 8px currentColor':'opacity:.55'}">${op}%</span>`:'<span class="pct-none">—</span>'}</td>
+      <td>${item.parsedOk
+        ?'<span class="badge" style="background:#22c55e22;color:#86efac;border:1px solid #22c55e44">✓ 已解析</span>'
+        :'<span class="badge" style="background:#f59e0b22;color:#fcd34d;border:1px solid #f59e0b44">? 待確認</span>'}</td>
+    `;
+
+    const drow = document.createElement('tr');
+    drow.className = 'drow';
+    const dtd = document.createElement('td');
+    dtd.colSpan = 8;
+    dtd.innerHTML = `<div class="detail-inner">
+      <h4>賞品配率 — 總抽數 ${item.totalPulls||'?'}</h4>
+      ${item.parsedOk
+        ? prizeGrid
+        : `<p class="no-prize">未能解析賞品配率，請至 <a href="${item.url}" target="_blank" style="color:var(--accent)">商品頁面</a> 查看</p>`
+      }
+    </div>`;
+    drow.appendChild(dtd);
+
+    prow.addEventListener('click', () => {
+      prow.classList.toggle('open');
+      drow.classList.toggle('open');
+    });
+    tbody.appendChild(prow);
+    tbody.appendChild(drow);
+  });
+}
+
+/* ─ 篩選 & 排序 ─ */
+let state = { source:'all', badge:'all', q:'', col:'topProb', asc:false };
+
+function apply() {
+  let rows = DATA.slice();
+  if (state.source!=='all') rows = rows.filter(d=>d.source===state.source);
+  if (state.badge!=='all')  rows = rows.filter(d=>d.badge===state.badge);
+  if (state.q) {
+    const q = state.q.toLowerCase();
+    rows = rows.filter(d=>d.name.toLowerCase().includes(q));
+  }
+  if (state.col) {
+    rows.sort((a,b) => {
+      // topProb 欄位：先分兩組（tp>op 靠頂），組內再按大賞機率排
+      if (state.col==='topProb') {
+        const tpa=topProb(a)??-1, tpb=topProb(b)??-1;
+        const aUp=(tpa>(origTopProb(a)??-1))?1:0, bUp=(tpb>(origTopProb(b)??-1))?1:0;
+        if (aUp!==bUp) return bUp-aUp;           // tp>op 組永遠在上
+        return state.asc?tpa-tpb:tpb-tpa;        // 組內按大賞機率排
+      }
+      let va,vb;
+      if (state.col==='price')    {va=a.price||9999;     vb=b.price||9999;}
+      if (state.col==='rem')      {va=a.remaining??9999; vb=b.remaining??9999;}
+      if (state.col==='remPct')   {va=remPct(a)??-1;     vb=remPct(b)??-1;}
+      if (state.col==='origProb') {va=origTopProb(a)??-1;vb=origTopProb(b)??-1;}
+      return state.asc?va-vb:vb-va;
+    });
+  }
+  renderRows(rows);
+  // 更新 th 箭頭
+  document.querySelectorAll('th[data-col]').forEach(th => {
+    th.classList.remove('asc','desc');
+    if (th.dataset.col===state.col) th.classList.add(state.asc?'asc':'desc');
+  });
+}
+
+document.getElementById('q').addEventListener('input', e=>{ state.q=e.target.value; apply(); });
+
+document.querySelectorAll('.tag').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const f=btn.dataset.f, v=btn.dataset.v;
+    state[f]=v;
+    document.querySelectorAll(`.tag[data-f="${f}"]`).forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    apply();
+  });
+});
+
+document.querySelectorAll('th[data-col]').forEach(th => {
+  th.addEventListener('click', () => {
+    const c=th.dataset.col;
+    if (state.col===c) state.asc=!state.asc; else {state.col=c;state.asc=true;}
+    apply();
+  });
+});
+
+apply();
+</script>
+</body>
+</html>
