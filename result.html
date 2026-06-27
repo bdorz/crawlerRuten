@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>一抽露魂分析 2026-06-27 11:59</title>
+<title>一抽露魂分析 2026-06-27 07:18</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -107,7 +107,7 @@ tr.prow.open .arrow{transform:rotate(180deg)}
 
 <header>
   <h1>一抽露魂 機率分析</h1>
-  <p>更新時間：2026-06-27 11:59　只顯示「尚有大賞」與「大賞齊全」商品</p>
+  <p>更新時間：2026-06-27 07:18　只顯示「尚有大賞」與「大賞齊全」商品</p>
   <div class="stats" id="statsRow"></div>
 </header>
 
@@ -175,7 +175,7 @@ function bestPrize(d) {
   return main.reduce((a,b) => b.prob > a.prob ? b : a, main[0]);
 }
 
-// 開套大獎機率 = 以 qtyTotal/totalPulls 算出的原始機率加總（排除景品/絨毛/高機率低賞）
+// 開套大賞機率 = 以 qtyTotal/totalPulls 算出的原始機率加總（排除景品/絨毛/高機率低賞）
 function origTopProb(d) {
   if (!d.totalPulls) return null;
   const main = d.prizes.filter(p => {
@@ -315,11 +315,10 @@ function renderRows(items) {
 }
 
 /* ─ 篩選 & 排序 ─ */
-let state = { source:'all', badge:'all', q:'', col:'topProb', asc:false };
+let state = { badge:'all', q:'', col:'topProb', asc:false };
 
 function apply() {
   let rows = DATA.slice();
-  if (state.source!=='all') rows = rows.filter(d=>d.source===state.source);
   if (state.badge!=='all')  rows = rows.filter(d=>d.badge===state.badge);
   if (state.q) {
     const q = state.q.toLowerCase();
@@ -327,12 +326,11 @@ function apply() {
   }
   if (state.col) {
     rows.sort((a,b) => {
-      // topProb 欄位：先分兩組（tp>op 靠頂），組內再按大賞機率排
       if (state.col==='topProb') {
         const tpa=topProb(a)??-1, tpb=topProb(b)??-1;
         const aUp=(tpa>(origTopProb(a)??-1))?1:0, bUp=(tpb>(origTopProb(b)??-1))?1:0;
-        if (aUp!==bUp) return bUp-aUp;           // tp>op 組永遠在上
-        return state.asc?tpa-tpb:tpb-tpa;        // 組內按大賞機率排
+        if (aUp!==bUp) return bUp-aUp;
+        return state.asc?tpa-tpb:tpb-tpa;
       }
       let va,vb;
       if (state.col==='price')    {va=a.price||9999;     vb=b.price||9999;}
