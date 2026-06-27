@@ -43,10 +43,13 @@ jobs:
 
       # ── 選用：部署到 GitHub Pages 讓你直接用瀏覽器看 ──
       # 要啟用：到 repo Settings → Pages → Source 選 "GitHub Actions"
+      - name: Prepare Pages
+        run: cp result.html index.html
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "."   # 上傳整個目錄（包含 result.html）
+          path: "."   # 上傳整個目錄（包含 result.html / index.html）
 
   deploy-pages:
     needs: scrape
