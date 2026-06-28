@@ -9,7 +9,7 @@
 import asyncio
 import json
 import os
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 from playwright.async_api import async_playwright
@@ -259,7 +259,8 @@ async def main() -> None:
 
 # ── HTML 產生 ─────────────────────────────────────────────────────────────────
 def generate_html(products: list[dict]) -> str:
-    updated   = datetime.now().strftime("%Y-%m-%d %H:%M")
+    tw_tz  = timezone(timedelta(hours=8))
+    updated = datetime.now(tw_tz).strftime("%Y-%m-%d %H:%M")
     data_json = json.dumps(products, ensure_ascii=False)
 
     return f"""<!DOCTYPE html>
