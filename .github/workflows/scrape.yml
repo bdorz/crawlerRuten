@@ -2,8 +2,8 @@ name: 一抽露魂巡測
 
 on:
   schedule:
-    # 每天台灣時間晚上 21:00（UTC 13:00）自動執行
-    - cron: "0 13 * * *"
+    # 每 4 小時執行一次（UTC）
+    - cron: "0 */4 * * *"
   workflow_dispatch:  # 允許手動觸發
 
 permissions:
@@ -33,23 +33,35 @@ jobs:
       - name: Run scraper
         run: python scraper.py
 
-      - name: Commit result.html
+      - name: Commit results
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add result.html
+          git add result.html winners.json
           git diff --staged --quiet || git commit -m "chore: update scrape results $(date -u +'%Y-%m-%d %H:%M UTC')"
           git push
 
-      # ── 選用：部署到 GitHub Pages 讓你直接用瀏覽器看 ──
-      # 要啟用：到 repo Settings → Pages → Source 選 "GitHub Actions"
+      - name: Send notification email
+        if: ${{ hashFiles('notification.txt') != '' }}
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.GMAIL_USER }}
+          password: ${{ secrets.GMAIL_PASS }}
+          subject: "🎯 一抽露魂：新增大賞機率超過開套機率商品"
+          to: aegis22297@gmail.com
+          from: 一抽露魂巡測 <${{ secrets.GMAIL_USER }}>
+          body: file://notification.txt
+
       - name: Prepare Pages
         run: cp result.html index.html
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "."   # 上傳整個目錄（包含 result.html / index.html）
+          path: "."
 
   deploy-pages:
     needs: scrape

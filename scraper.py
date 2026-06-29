@@ -256,6 +256,65 @@ async def main() -> None:
     OUTPUT_FILE.write_text(generate_html(products), encoding="utf-8")
     print(f"結果已儲存至 {OUTPUT_FILE}")
 
+    # ── 比對新舊 winners，有新增才產出通知檔 ────────────────────────────────────
+    winners_path = Path("winners.json")
+    prev_names: set[str] = set()
+    if winners_path.exists():
+        try:
+            prev_names = {w["name"] for w in json.loads(winners_path.read_text(encoding="utf-8"))}
+        except Exception:
+            pass
+
+    current_winners = []
+    for p in products:
+        tp = compute_top_prob(p)
+        op = compute_orig_top_prob(p)
+        if tp is not None and op is not None and tp > op:
+            current_winners.append({
+                "name": p["name"], "topProb": tp, "origProb": op,
+                "price": p.get("price"), "url": p["url"],
+            })
+
+    winners_path.write_text(json.dumps(current_winners, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    new_winners = [w for w in current_winners if w["name"] not in prev_names]
+    notif_path = Path("notification.txt")
+    if new_winners:
+        lines = ["有新的商品大賞機率已超過開套機率：\n"]
+        for w in new_winners:
+            lines.append(f"• {w['name']}")
+            lines.append(f"  大賞機率：{w['topProb']}%　開套機率：{w['origProb']}%　單抽：NT${w['price']}")
+            lines.append(f"  {w['url']}\n")
+        notif_path.write_text("\n".join(lines), encoding="utf-8")
+        print(f"📬 新增 {len(new_winners)} 個符合條件商品，已寫入 notification.txt")
+    else:
+        notif_path.unlink(missing_ok=True)
+        print("無新增符合條件商品，不寄送通知")
+
+
+# ── 機率計算（Python 端，與 JS 邏輯同步）────────────────────────────────────────
+def _is_low(p: dict) -> bool:
+    return "景品" in p.get("name", "") or "絨毛" in p.get("name", "") or p.get("prob", 0) > 50
+
+def compute_top_prob(product: dict):
+    prizes = product.get("prizes", [])
+    main = [p for p in prizes
+            if not p.get("isSoldOut") and p.get("prob", 0) > 0 and p.get("qty", 0) != 0
+            and not _is_low(p)]
+    return round(sum(p["prob"] for p in main), 2) if main else None
+
+def compute_orig_top_prob(product: dict):
+    total = product.get("totalPulls", 0)
+    if not total:
+        return None
+    prizes = product.get("prizes", [])
+    main = [p for p in prizes
+            if p.get("qtyTotal", 0) > 0
+            and p["qtyTotal"] / total * 100 <= 50
+            and "景品" not in p.get("name", "")
+            and "絨毛" not in p.get("name", "")]
+    return round(sum(p["qtyTotal"] / total * 100 for p in main), 2) if main else None
+
 
 # ── HTML 產生 ─────────────────────────────────────────────────────────────────
 def generate_html(products: list[dict]) -> str:
