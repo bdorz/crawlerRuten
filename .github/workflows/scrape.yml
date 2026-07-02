@@ -66,6 +66,8 @@ jobs:
   deploy-pages:
     needs: scrape
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    continue-on-error: true
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
