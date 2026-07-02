@@ -7,9 +7,7 @@ on:
   workflow_dispatch:  # 允許手動觸發
 
 permissions:
-  contents: write   # 允許 commit result.html 回 repo
-  pages: write      # 允許部署 GitHub Pages
-  id-token: write
+  contents: write
 
 jobs:
   scrape:
@@ -54,25 +52,3 @@ jobs:
           to: aegis22297@gmail.com
           from: 一抽露魂巡測 <${{ secrets.GMAIL_USER }}>
           body: file://notification.txt
-
-      - name: Prepare Pages
-        run: cp result.html index.html
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: "."
-
-  deploy-pages:
-    needs: scrape
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    continue-on-error: true
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
-
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deploy
-        uses: actions/deploy-pages@v4
