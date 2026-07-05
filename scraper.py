@@ -425,6 +425,12 @@ tr.prow.open .arrow{{transform:rotate(180deg)}}
 
 .empty{{padding:48px;text-align:center;color:var(--text2)}}
 .no-prize{{color:var(--text2);font-size:12px;font-style:italic}}
+
+.overdue-yes{{display:inline-block;padding:3px 10px;border-radius:5px;font-size:12px;font-weight:800;
+  color:#fbbf24;background:#f59e0b22;border:1px solid #f59e0b66;
+  text-shadow:0 0 8px #f59e0b99;cursor:default}}
+.overdue-no{{display:inline-block;padding:3px 10px;border-radius:5px;font-size:12px;
+  color:var(--text2);opacity:.5;cursor:default}}
 </style>
 </head>
 <body>
@@ -454,6 +460,7 @@ tr.prow.open .arrow{{transform:rotate(180deg)}}
     <th data-col="remPct">剩餘%</th>
     <th data-col="topProb">大賞機率</th>
     <th data-col="origProb">開套機率</th>
+    <th data-col="overdue">超期狙擊</th>
     <th>狀態</th>
   </tr></thead>
   <tbody id="tbody"></tbody>
@@ -509,6 +516,29 @@ function origTopProb(d) {{
   }});
   if (!main.length) return null;
   return +(main.reduce((s,p) => s + p.qtyTotal / d.totalPulls * 100, 0)).toFixed(2);
+}}
+
+/* ─ 超期狙擊判斷 ─
+   概念：totalPulls / 主賞數 = 平均每隻大獎需消耗抽數
+   若已抽數 >= 平均抽數 × (已出獎數+1)，代表「統計上下一隻大獎已超期」
+   回傳物件或 null（資料不足時）*/
+function overdueCheck(d) {{
+  if (!d.totalPulls || d.remaining == null) return null;
+  const mainPrizes = d.prizes.filter(p => {{
+    if (!p.qtyTotal) return false;
+    const origProb = p.qtyTotal / d.totalPulls * 100;
+    return !p.name.includes('景品') && !p.name.includes('絨毛') && origProb <= 50;
+  }});
+  if (!mainPrizes.length) return null;
+  const mainTotal     = mainPrizes.length;
+  const mainRemaining = mainPrizes.filter(p => p.qty > 0 && !p.isSoldOut).length;
+  if (mainRemaining === 0) return null;          // 大賞全出完，無從狙擊
+  const mainGone         = mainTotal - mainRemaining;
+  const avgPullsPerPrize = d.totalPulls / mainTotal;
+  const pullsDone        = d.totalPulls - d.remaining;
+  const isOverdue        = pullsDone >= avgPullsPerPrize * (mainGone + 1);
+  return {{ isOverdue, pullsDone: Math.round(pullsDone), avg: +avgPullsPerPrize.toFixed(1),
+            mainGone, mainRemaining, mainTotal }};
 }}
 
 /* ─ 統計列 ─ */
@@ -611,6 +641,12 @@ function renderRows(items) {{
       </td>
       <td>${{tp!==null?`<span class="pct ${{pctClass(tp)}}" style="${{tpWins?'font-weight:800;text-shadow:0 0 8px currentColor':opWins?'opacity:.55':''}}">${{tp}}%</span>`:'<span class="pct-none">—</span>'}}</td>
       <td>${{op!==null?`<span class="pct ${{pctClass(op)}}" style="${{opWins?'font-weight:800;text-shadow:0 0 8px currentColor':'opacity:.55'}}">${{op}}%</span>`:'<span class="pct-none">—</span>'}}</td>
+      <td>${{(() => {{
+        const ov = overdueCheck(item);
+        if (!ov) return '<span class="pct-none">—</span>';
+        if (ov.isOverdue) return `<span class="overdue-yes" title="已抽${{ov.pullsDone}}抽｜平均每${{ov.avg}}抽一獎｜已出${{ov.mainGone}}/${{ov.mainTotal}}獎">⚡ 是</span>`;
+        return `<span class="overdue-no" title="已抽${{ov.pullsDone}}抽｜平均每${{ov.avg}}抽一獎｜已出${{ov.mainGone}}/${{ov.mainTotal}}獎">否</span>`;
+      }})()}}</td>
       <td>${{item.parsedOk
         ?'<span class="badge" style="background:#22c55e22;color:#86efac;border:1px solid #22c55e44">✓ 已解析</span>'
         :'<span class="badge" style="background:#f59e0b22;color:#fcd34d;border:1px solid #f59e0b44">? 待確認</span>'}}</td>
@@ -619,7 +655,7 @@ function renderRows(items) {{
     const drow = document.createElement('tr');
     drow.className = 'drow';
     const dtd = document.createElement('td');
-    dtd.colSpan = 8;
+    dtd.colSpan = 9;
     dtd.innerHTML = `<div class="detail-inner">
       <h4>賞品配率 — 總抽數 ${{item.totalPulls||'?'}}</h4>
       ${{item.parsedOk
@@ -661,6 +697,10 @@ function apply() {{
       if (state.col==='rem')      {{va=a.remaining??9999; vb=b.remaining??9999;}}
       if (state.col==='remPct')   {{va=remPct(a)??-1;     vb=remPct(b)??-1;}}
       if (state.col==='origProb') {{va=origTopProb(a)??-1;vb=origTopProb(b)??-1;}}
+      if (state.col==='overdue')  {{
+        const oa=overdueCheck(a), ob=overdueCheck(b);
+        va=(oa?.isOverdue?1:0); vb=(ob?.isOverdue?1:0);
+      }}
       return state.asc?va-vb:vb-va;
     }});
   }}
