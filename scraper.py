@@ -218,8 +218,13 @@ async def main() -> None:
                     prizes = []
                     try:
                         await page.goto(card["url"], wait_until="domcontentloaded", timeout=30000)
-                        await page.wait_for_timeout(DELAY_MS)
                         await dismiss_modal(page)   # ← 商品頁也可能有彈窗
+                        # 等到賞品列表真正渲染出來（最多等 10 秒），避免 CI 環境載入慢
+                        try:
+                            await page.wait_for_selector("li.ichiban-prize-item", timeout=10000)
+                        except Exception:
+                            pass  # 等不到就繼續，可能頁面結構不同
+                        await page.wait_for_timeout(500)
                         prizes = await page.evaluate(PARSE_PRIZES_JS)
                     except Exception as e:
                         print(f"          ↳ 商品頁錯誤：{e}")
@@ -228,6 +233,11 @@ async def main() -> None:
                         print(f"          ↳ 解析到 {len(prizes)} 個賞項")
                     else:
                         print(f"          ↳ 未解析到賞品配率")
+                        if DEBUG:
+                            item_id = card["url"].rstrip("/").split("/")[-1]
+                            debug_path = Path(f"debug_product_{item_id}.html")
+                            debug_path.write_text(await page.content(), encoding="utf-8")
+                            print(f"          ↳ 已存 {debug_path}")
 
                     products.append({
                         "source":     label,
