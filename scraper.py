@@ -26,6 +26,11 @@ SEARCHES = [
         "url": "https://www.ruten.com.tw/event/ichiban_search.php/?q=%E5%A9%86",
         "skip_keywords": [],
     },
+    {
+        "label": "碧藍航線",
+        "url": "https://www.ruten.com.tw/event/ichiban_search.php/?q=%E7%A2%A7%E8%97%8D%E8%88%AA%E7%B7%9A",
+        "skip_keywords": [],
+    },
 ]
 
 # 只爬有這些徽章的商品
@@ -383,6 +388,7 @@ tr.drow.open{{display:table-row}}
 .badge{{display:inline-block;padding:2px 7px;border-radius:4px;font-size:11px;font-weight:600}}
 .badge-女神{{background:#7c3aed22;color:#c4b5fd;border:1px solid #7c3aed55}}
 .badge-老婆{{background:#be185d22;color:#f9a8d4;border:1px solid #be185d55}}
+.badge-碧藍航線{{background:#0e7490;color:#67e8f9;border:1px solid #0891b255}}
 .badge-尚有大賞{{background:#f59e0b22;color:#fcd34d;border:1px solid #f59e0b55}}
 .badge-大賞齊全{{background:#22c55e22;color:#86efac;border:1px solid #22c55e55}}
 
