@@ -48,7 +48,7 @@ jobs:
           secure: true
           username: ${{ secrets.GMAIL_USER }}
           password: ${{ secrets.GMAIL_PASS }}
-          subject: "🎯 一抽露魂：新增大賞機率超過開套機率商品"
+          subject: "🎯 一抽露魂：新增值得注意的商品"
           to: aegis22297@gmail.com
           from: 一抽露魂巡測 <${{ secrets.GMAIL_USER }}>
           body: file://notification.txt

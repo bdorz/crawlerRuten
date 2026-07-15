@@ -271,16 +271,23 @@ async def main() -> None:
     OUTPUT_FILE.write_text(generate_html(products), encoding="utf-8")
     print(f"結果已儲存至 {OUTPUT_FILE}")
 
-    # ── 比對新舊 winners，有新增才產出通知檔 ────────────────────────────────────
+    # ── 比對新舊狀態，有新增才產出通知檔 ─────────────────────────────────────────
     winners_path = Path("winners.json")
-    prev_names: set[str] = set()
+    prev_winner_names: set[str] = set()
+    prev_overdue_names: set[str] = set()
     if winners_path.exists():
         try:
-            prev_names = {w["name"] for w in json.loads(winners_path.read_text(encoding="utf-8"))}
+            prev_data = json.loads(winners_path.read_text(encoding="utf-8"))
+            if isinstance(prev_data, list):
+                prev_winner_names = {w["name"] for w in prev_data}
+            else:
+                prev_winner_names = {w["name"] for w in prev_data.get("winners", [])}
+                prev_overdue_names = {w["name"] for w in prev_data.get("overdue", [])}
         except Exception:
             pass
 
     current_winners = []
+    current_overdue = []
     for p in products:
         tp = compute_top_prob(p)
         op = compute_orig_top_prob(p)
@@ -289,19 +296,37 @@ async def main() -> None:
                 "name": p["name"], "topProb": tp, "origProb": op,
                 "price": p.get("price"), "url": p["url"],
             })
+        ov = compute_overdue(p)
+        if ov and ov["isOverdue"]:
+            current_overdue.append({
+                "name": p["name"], "pullsDone": ov["pullsDone"],
+                "avg": ov["avg"], "mainGone": ov["mainGone"],
+                "mainTotal": ov["mainTotal"], "price": p.get("price"), "url": p["url"],
+            })
 
-    winners_path.write_text(json.dumps(current_winners, ensure_ascii=False, indent=2), encoding="utf-8")
+    winners_path.write_text(json.dumps(
+        {"winners": current_winners, "overdue": current_overdue},
+        ensure_ascii=False, indent=2), encoding="utf-8")
 
-    new_winners = [w for w in current_winners if w["name"] not in prev_names]
+    new_winners = [w for w in current_winners if w["name"] not in prev_winner_names]
+    new_overdue  = [w for w in current_overdue  if w["name"] not in prev_overdue_names]
     notif_path = Path("notification.txt")
-    if new_winners:
-        lines = ["有新的商品大賞機率已超過開套機率：\n"]
-        for w in new_winners:
-            lines.append(f"• {w['name']}")
-            lines.append(f"  大賞機率：{w['topProb']}%　開套機率：{w['origProb']}%　單抽：NT${w['price']}")
-            lines.append(f"  {w['url']}\n")
+    if new_winners or new_overdue:
+        lines = []
+        if new_winners:
+            lines.append("【大賞機率超過開套機率 — 新增商品】\n")
+            for w in new_winners:
+                lines.append(f"• {w['name']}")
+                lines.append(f"  大賞機率：{w['topProb']}%　開套機率：{w['origProb']}%　單抽：NT${w['price']}")
+                lines.append(f"  {w['url']}\n")
+        if new_overdue:
+            lines.append("【超期狙擊 — 新增商品】\n")
+            for w in new_overdue:
+                lines.append(f"• {w['name']}")
+                lines.append(f"  已抽：{w['pullsDone']} 抽　平均每 {w['avg']} 抽一獎　已出 {w['mainGone']}/{w['mainTotal']} 獎　單抽：NT${w['price']}")
+                lines.append(f"  {w['url']}\n")
         notif_path.write_text("\n".join(lines), encoding="utf-8")
-        print(f"📬 新增 {len(new_winners)} 個符合條件商品，已寫入 notification.txt")
+        print(f"📬 新增 {len(new_winners)} 個大賞超標、{len(new_overdue)} 個超期商品，已寫入 notification.txt")
     else:
         notif_path.unlink(missing_ok=True)
         print("無新增符合條件商品，不寄送通知")
@@ -331,6 +356,33 @@ def compute_orig_top_prob(product: dict):
             and p["qtyTotal"] / total * 100 <= 40
             and not any(kw in p.get("name", "") for kw in LOW_KEYWORDS)]
     return round(sum(p["qtyTotal"] / total * 100 for p in main), 2) if main else None
+
+def compute_overdue(product: dict):
+    total = product.get("totalPulls", 0)
+    remaining = product.get("remaining")
+    if not total or remaining is None:
+        return None
+    prizes = product.get("prizes", [])
+    main_prizes = [p for p in prizes
+                   if p.get("qtyTotal", 0) > 0
+                   and p["qtyTotal"] / total * 100 <= 40
+                   and not any(kw in p.get("name", "") for kw in LOW_KEYWORDS)]
+    if not main_prizes:
+        return None
+    main_total     = len(main_prizes)
+    main_remaining = sum(1 for p in main_prizes if p.get("qty", 0) > 0 and not p.get("isSoldOut"))
+    if main_remaining == 0:
+        return None
+    main_gone      = main_total - main_remaining
+    avg_pulls      = total / main_total
+    pulls_done     = total - remaining
+    return {
+        "isOverdue":  pulls_done >= avg_pulls * (main_gone + 1),
+        "pullsDone":  round(pulls_done),
+        "avg":        round(avg_pulls, 1),
+        "mainGone":   main_gone,
+        "mainTotal":  main_total,
+    }
 
 
 # ── HTML 產生 ─────────────────────────────────────────────────────────────────
