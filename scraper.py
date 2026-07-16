@@ -750,6 +750,7 @@ let state = {{ badge:'all', q:'', col:'topProb', asc:false }};
 
 function apply() {{
   let rows = DATA.slice();
+  rows = rows.filter(d => topProb(d) !== null);   // 無大賞可抽的直接不顯示
   if (state.badge!=='all')  rows = rows.filter(d=>d.badge===state.badge);
   if (state.q) {{
     const q = state.q.toLowerCase();
