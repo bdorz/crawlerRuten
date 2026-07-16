@@ -272,17 +272,18 @@ async def main() -> None:
     print(f"結果已儲存至 {OUTPUT_FILE}")
 
     # ── 比對新舊狀態，有新增才產出通知檔 ─────────────────────────────────────────
+    # seen_winners / seen_overdue：曾經通知過的名單，永久累積，避免重複通知
     winners_path = Path("winners.json")
-    prev_winner_names: set[str] = set()
-    prev_overdue_names: set[str] = set()
+    seen_winner_names: set[str] = set()
+    seen_overdue_names: set[str] = set()
     if winners_path.exists():
         try:
             prev_data = json.loads(winners_path.read_text(encoding="utf-8"))
             if isinstance(prev_data, list):
-                prev_winner_names = {w["name"] for w in prev_data}
+                seen_winner_names = {w["name"] for w in prev_data}
             else:
-                prev_winner_names = {w["name"] for w in prev_data.get("winners", [])}
-                prev_overdue_names = {w["name"] for w in prev_data.get("overdue", [])}
+                seen_winner_names  = set(prev_data.get("seen_winners", []))
+                seen_overdue_names = set(prev_data.get("seen_overdue", []))
         except Exception:
             pass
 
@@ -304,12 +305,21 @@ async def main() -> None:
                 "mainTotal": ov["mainTotal"], "price": p.get("price"), "url": p["url"],
             })
 
-    winners_path.write_text(json.dumps(
-        {"winners": current_winners, "overdue": current_overdue},
-        ensure_ascii=False, indent=2), encoding="utf-8")
+    new_winners = [w for w in current_winners if w["name"] not in seen_winner_names]
+    new_overdue  = [w for w in current_overdue  if w["name"] not in seen_overdue_names]
 
-    new_winners = [w for w in current_winners if w["name"] not in prev_winner_names]
-    new_overdue  = [w for w in current_overdue  if w["name"] not in prev_overdue_names]
+    # 將新通知的名字加入永久記憶
+    seen_winner_names  |= {w["name"] for w in new_winners}
+    seen_overdue_names |= {w["name"] for w in new_overdue}
+
+    winners_path.write_text(json.dumps(
+        {
+            "winners":      current_winners,
+            "overdue":      current_overdue,
+            "seen_winners": sorted(seen_winner_names),
+            "seen_overdue": sorted(seen_overdue_names),
+        },
+        ensure_ascii=False, indent=2), encoding="utf-8")
     notif_path = Path("notification.txt")
     if new_winners or new_overdue:
         lines = []
