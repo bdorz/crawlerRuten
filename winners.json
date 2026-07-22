@@ -8,13 +8,6 @@
       "url": "https://www.ruten.com.tw/item/52626960008438/"
     },
     {
-      "name": "【幫主子賺罐罐】女神大亂鬥 快來找老婆",
-      "topProb": 4.15,
-      "origProb": 3.57,
-      "price": 380,
-      "url": "https://www.ruten.com.tw/item/52625915877431/"
-    },
-    {
       "name": "【幫主子賺罐罐】老婆爽爽抽 女神都在這 泳裝特輯Vol2",
       "topProb": 3.6,
       "origProb": 3.33,
@@ -30,7 +23,7 @@
     },
     {
       "name": "【番魂社】老婆補完計劃4",
-      "topProb": 2.3,
+      "topProb": 2.35,
       "origProb": 2.0,
       "price": 480,
       "url": "https://www.ruten.com.tw/item/52626996091316/"
@@ -55,13 +48,6 @@
       "origProb": 2.5,
       "price": 380,
       "url": "https://www.ruten.com.tw/item/52606135295821/"
-    },
-    {
-      "name": "【誠格一番】碧藍航線 福利抽 翔鶴 散花舞鶴Ver. 1/7 PVC D1",
-      "topProb": 0.85,
-      "origProb": 0.83,
-      "price": 99,
-      "url": "https://www.ruten.com.tw/item/52625927377721/"
     }
   ],
   "overdue": [],
