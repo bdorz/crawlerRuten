@@ -343,7 +343,7 @@ async def main() -> None:
 
 
 # ── 機率計算（Python 端，與 JS 邏輯同步）────────────────────────────────────────
-LOW_KEYWORDS = ["景品", "絨毛", "補充包", "卡冊", "桌遊", "大富翁", "掛軸", "立牌", "毛巾", "海報"]
+LOW_KEYWORDS = ["景品", "絨毛", "補充包", "卡冊", "桌遊", "大富翁", "掛軸", "立牌", "毛巾", "海報", "碧藍戰卡", "IP盲盒"]
 
 def _is_low(p: dict) -> bool:
     name = p.get("name", "")
@@ -558,7 +558,7 @@ function categorizePrizes(prizes) {{
   if (!prizes?.length) return {{ main:[], low:[], gone:[], lowProb:0, lowTiers:'' }};
   const gone = prizes.filter(p => p.isSoldOut || p.prob === 0 || p.qty === 0);
   const live = prizes.filter(p => !p.isSoldOut && p.prob > 0 && p.qty !== 0);
-  const LOW_KW = ['景品','絨毛','補充包','卡冊','桌遊','大富翁','掛軸','立牌','毛巾','海報'];
+  const LOW_KW = ['景品','絨毛','補充包','卡冊','桌遊','大富翁','掛軸','立牌','毛巾','海報','碧藍戰卡','IP盲盒'];
   const isLow = p => LOW_KW.some(k => p.name.includes(k)) || p.prob > 40;
   const low   = live.filter(p => isLow(p));
   const main  = live.filter(p => !isLow(p));
@@ -593,7 +593,7 @@ function origTopProb(d) {{
   const main = d.prizes.filter(p => {{
     if (!p.qtyTotal) return false;
     const op = p.qtyTotal / d.totalPulls * 100;
-    return !['景品','絨毛','補充包','卡冊','桌遊','大富翁','掛軸','立牌','毛巾','海報'].some(k => p.name.includes(k)) && op <= 40;
+    return !['景品','絨毛','補充包','卡冊','桌遊','大富翁','掛軸','立牌','毛巾','海報','碧藍戰卡','IP盲盒'].some(k => p.name.includes(k)) && op <= 40;
   }});
   if (!main.length) return null;
   return +(main.reduce((s,p) => s + p.qtyTotal / d.totalPulls * 100, 0)).toFixed(2);
@@ -608,7 +608,7 @@ function overdueCheck(d) {{
   const mainPrizes = d.prizes.filter(p => {{
     if (!p.qtyTotal) return false;
     const origProb = p.qtyTotal / d.totalPulls * 100;
-    return !['景品','絨毛','補充包','卡冊','桌遊','大富翁','掛軸','立牌','毛巾','海報'].some(k => p.name.includes(k)) && origProb <= 40;
+    return !['景品','絨毛','補充包','卡冊','桌遊','大富翁','掛軸','立牌','毛巾','海報','碧藍戰卡','IP盲盒'].some(k => p.name.includes(k)) && origProb <= 40;
   }});
   if (!mainPrizes.length) return null;
   const mainTotal     = mainPrizes.length;
