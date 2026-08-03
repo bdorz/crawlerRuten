@@ -16,7 +16,7 @@
     },
     {
       "name": "【一抽露魂】《崩壞：星穹鐵道》～狩獵時空的女神們～漫畫博覽會限定17",
-      "topProb": 5.0,
+      "topProb": 5.2,
       "origProb": 4.76,
       "price": 200,
       "url": "https://www.ruten.com.tw/item/52629165301164/"
@@ -51,7 +51,7 @@
     },
     {
       "name": "【番魂社】老婆補完計劃4",
-      "topProb": 2.55,
+      "topProb": 2.6,
       "origProb": 2.0,
       "price": 480,
       "url": "https://www.ruten.com.tw/item/52626996091316/"
@@ -88,7 +88,7 @@
   "overdue": [
     {
       "name": "【番魂社】老婆補完計劃4",
-      "pullsDone": 54,
+      "pullsDone": 58,
       "avg": 50.0,
       "mainGone": 0,
       "mainTotal": 5,
