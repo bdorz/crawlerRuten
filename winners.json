@@ -1,13 +1,6 @@
 {
   "winners": [
     {
-      "name": "【幫主子賺罐罐】老婆爽爽抽 女神大亂鬥 vol3",
-      "topProb": 3.77,
-      "origProb": 3.75,
-      "price": 430,
-      "url": "https://www.ruten.com.tw/item/52631265556957/"
-    },
-    {
       "name": "【三隻貓卡遊】碧藍航線 女神福利抽1 大鳳 戀慕伴侣1/4 鎮海 奇奢華苑1/6 光榮 涼夜香雪1/7 PVC Z1",
       "topProb": 0.54,
       "origProb": 0.53,
@@ -51,7 +44,7 @@
     },
     {
       "name": "【番魂社】老婆補完計劃4",
-      "topProb": 2.7,
+      "topProb": 2.64,
       "origProb": 2.0,
       "price": 480,
       "url": "https://www.ruten.com.tw/item/52626996091316/"
@@ -65,7 +58,7 @@
     },
     {
       "name": "【貨比三家】gk 1/7 大鳳 碧藍航線 女角 歐派 胸 兇 紅色禮服 坐姿 公仔 模型 樹酯 BC工作室",
-      "topProb": 0.95,
+      "topProb": 0.96,
       "origProb": 0.7,
       "price": 99,
       "url": "https://www.ruten.com.tw/item/52629151651011/"
@@ -85,17 +78,7 @@
       "url": "https://www.ruten.com.tw/item/52625927377721/"
     }
   ],
-  "overdue": [
-    {
-      "name": "【番魂社】老婆補完計劃4",
-      "pullsDone": 64,
-      "avg": 50.0,
-      "mainGone": 0,
-      "mainTotal": 5,
-      "price": 480,
-      "url": "https://www.ruten.com.tw/item/52626996091316/"
-    }
-  ],
+  "overdue": [],
   "seen_winners": [
     "【一抽露魂】《原神  Genshin》～旅行者的午後~後宮女神大集結～漫畫博覽會限定11",
     "【一抽露魂】《崩壞：星穹鐵道》～漫遊銀河的女神們～漫畫博覽會限定15",
