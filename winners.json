@@ -15,6 +15,13 @@
       "url": "https://www.ruten.com.tw/item/52629165301164/"
     },
     {
+      "name": "【誠格一番】女神福利抽 大集合1 約會大作戰 時崎狂三 幻塔 凛夜 原畫 羽根露娜 星宮六喰 泳裝 D1",
+      "topProb": 3.96,
+      "origProb": 3.8,
+      "price": 99,
+      "url": "https://www.ruten.com.tw/item/52626960008438/"
+    },
+    {
       "name": "【幫主子賺罐罐】女神大亂鬥 快來找老婆",
       "topProb": 4.2,
       "origProb": 3.57,
@@ -51,17 +58,10 @@
     },
     {
       "name": "【貨比三家】gk 1/7 大鳳 碧藍航線 女角 歐派 胸 兇 紅色禮服 坐姿 公仔 模型 樹酯 BC工作室",
-      "topProb": 0.97,
+      "topProb": 0.98,
       "origProb": 0.7,
       "price": 99,
       "url": "https://www.ruten.com.tw/item/52629151651011/"
-    },
-    {
-      "name": "【冷門玩具】!!現貨!! 自製賞 APEX 碧藍航線 奇爾沙治 Allnight Charge Ver. 1/7",
-      "topProb": 2.7,
-      "origProb": 2.5,
-      "price": 380,
-      "url": "https://www.ruten.com.tw/item/52606135295821/"
     },
     {
       "name": "【誠格一番】碧藍航線 福利抽 翔鶴 散花舞鶴Ver. 1/7 PVC D1",
@@ -69,6 +69,13 @@
       "origProb": 0.83,
       "price": 99,
       "url": "https://www.ruten.com.tw/item/52625927377721/"
+    },
+    {
+      "name": "【冷門玩具】!!現貨!! 自製賞 APEX 碧藍航線 奇爾沙治 Allnight Charge Ver. 1/7",
+      "topProb": 2.7,
+      "origProb": 2.5,
+      "price": 380,
+      "url": "https://www.ruten.com.tw/item/52606135295821/"
     }
   ],
   "overdue": [],
