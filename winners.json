@@ -51,7 +51,7 @@
     },
     {
       "name": "【番魂社】老婆補完計畫 VI",
-      "topProb": 2.8,
+      "topProb": 2.85,
       "origProb": 2.5,
       "price": 360,
       "url": "https://www.ruten.com.tw/item/52633368567034/"
@@ -97,6 +97,13 @@
       "origProb": 2.5,
       "price": 380,
       "url": "https://www.ruten.com.tw/item/52606135295821/"
+    },
+    {
+      "name": "【誠格一番】碧藍航線 福利抽 翔鶴 散花舞鶴Ver. 1/7 PVC D1",
+      "topProb": 0.85,
+      "origProb": 0.83,
+      "price": 99,
+      "url": "https://www.ruten.com.tw/item/52625927377721/"
     }
   ],
   "overdue": [],
