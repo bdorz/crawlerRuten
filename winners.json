@@ -36,13 +36,6 @@
       "url": "https://www.ruten.com.tw/item/52629165301164/"
     },
     {
-      "name": "【誠格一番】女神福利抽 大集合1 約會大作戰 時崎狂三 幻塔 凛夜 原畫 羽根露娜 星宮六喰 泳裝 D1",
-      "topProb": 3.96,
-      "origProb": 3.8,
-      "price": 199,
-      "url": "https://www.ruten.com.tw/item/52626960008438/"
-    },
-    {
       "name": "【番魂社】老婆補完計畫 VI",
       "topProb": 3.24,
       "origProb": 2.5,
@@ -64,6 +57,13 @@
       "url": "https://www.ruten.com.tw/item/52606135330898/"
     },
     {
+      "name": "【番魂社】老婆補完計劃4",
+      "topProb": 2.13,
+      "origProb": 2.0,
+      "price": 4480,
+      "url": "https://www.ruten.com.tw/item/52626996091316/"
+    },
+    {
       "name": "【玩具將軍】我婆篇 碧藍航線特集",
       "topProb": 2.7,
       "origProb": 2.4,
@@ -72,7 +72,7 @@
     },
     {
       "name": "【誠格一番】Alphamax 碧藍航線 高雄 春之意 1/4 PVC 完成品 D1",
-      "topProb": 0.53,
+      "topProb": 0.54,
       "origProb": 0.5,
       "price": 18899,
       "url": "https://www.ruten.com.tw/item/52633387413237/"
