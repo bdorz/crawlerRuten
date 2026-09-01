@@ -51,7 +51,7 @@
     },
     {
       "name": "【玩具將軍】我婆篇",
-      "topProb": 2.56,
+      "topProb": 2.6,
       "origProb": 2.5,
       "price": 450,
       "url": "https://www.ruten.com.tw/item/52634418995777/"
@@ -71,17 +71,7 @@
       "url": "https://www.ruten.com.tw/item/52633387413237/"
     }
   ],
-  "overdue": [
-    {
-      "name": "【玩具將軍】異世界老婆全都要",
-      "pullsDone": 62,
-      "avg": 23.3,
-      "mainGone": 0,
-      "mainTotal": 6,
-      "price": 450,
-      "url": "https://www.ruten.com.tw/item/52633352999362/"
-    }
-  ],
+  "overdue": [],
   "seen_winners": [
     "【一抽露魂】《原神  Genshin》～旅行者的午後~後宮女神大集結～漫畫博覽會限定11",
     "【一抽露魂】《崩壞：星穹鐵道》～漫遊銀河的女神們～漫畫博覽會限定15",
