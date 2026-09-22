@@ -29,20 +29,6 @@
       "url": "https://www.ruten.com.tw/item/52634414738026/"
     },
     {
-      "name": "【冷門玩具】!!現貨!!  自製賞 魅惑女神集合",
-      "topProb": 7.95,
-      "origProb": 6.25,
-      "price": 380,
-      "url": "https://www.ruten.com.tw/item/52633365917366/"
-    },
-    {
-      "name": "【冷門玩具】!!現貨!! 自製賞 Animester 大漫匠 1/7&amp;1/9 PVC 女神祭",
-      "topProb": 4.83,
-      "origProb": 3.75,
-      "price": 180,
-      "url": "https://www.ruten.com.tw/item/52632347848784/"
-    },
-    {
       "name": "【幫主子賺罐罐】老婆爽爽抽 女神大亂鬥 vol4",
       "topProb": 6.78,
       "origProb": 6.67,
@@ -65,7 +51,7 @@
     },
     {
       "name": "【富富景品】富婆賞2  蔚藍檔案 飛鳥馬季(時) 亞瑠（禮服）桔梗(特典笑臉)",
-      "topProb": 3.81,
+      "topProb": 3.84,
       "origProb": 3.75,
       "price": 350380,
       "url": "https://www.ruten.com.tw/item/52638657052220/"
@@ -90,20 +76,6 @@
       "origProb": 11.59,
       "price": 5965,
       "url": "https://www.ruten.com.tw/item/52637619296520/"
-    },
-    {
-      "name": "【富富景品】富婆賞1  碧藍航線  武藏 能代 香檳與玫瑰兔女郎 卡芙卡 愛莉希雅 魅魔班長澪奈",
-      "topProb": 5.58,
-      "origProb": 5.0,
-      "price": 400,
-      "url": "https://www.ruten.com.tw/item/52636559927624/"
-    },
-    {
-      "name": "【玩具將軍】我婆篇 特集",
-      "topProb": 2.7,
-      "origProb": 2.4,
-      "price": 420,
-      "url": "https://www.ruten.com.tw/item/52636532359646/"
     },
     {
       "name": "【玩具將軍】我婆篇",
@@ -132,12 +104,19 @@
       "origProb": 3.08,
       "price": 17988,
       "url": "https://www.ruten.com.tw/item/52634419969027/"
+    },
+    {
+      "name": "【誠格一番】AniGame 碧藍航線 大鳳 鷯 誓約&middot;潮風的吸引 Ver.1/6 標準版 PVC D1",
+      "topProb": 2.88,
+      "origProb": 2.67,
+      "price": 18899,
+      "url": "https://www.ruten.com.tw/item/52633387481300/"
     }
   ],
   "overdue": [
     {
       "name": "【冷門玩具】!!現貨!!  自製賞 魅惑女神集合",
-      "pullsDone": 17,
+      "pullsDone": 19,
       "avg": 16.0,
       "mainGone": 0,
       "mainTotal": 5,
