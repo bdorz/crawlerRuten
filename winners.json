@@ -2,14 +2,14 @@
   "winners": [
     {
       "name": "【玩具將軍】女神祭典",
-      "topProb": 5.72,
+      "topProb": 5.79,
       "origProb": 5.5,
       "price": 490,
       "url": "https://www.ruten.com.tw/item/52641839483976/"
     },
     {
       "name": "【幫主子賺罐罐】老婆爽爽抽 女神大亂鬥 vol9",
-      "topProb": 3.25,
+      "topProb": 3.3,
       "origProb": 3.12,
       "price": 9400,
       "url": "https://www.ruten.com.tw/item/52641833262650/"
@@ -37,7 +37,7 @@
     },
     {
       "name": "【模殿】S.H.Figuarts 老婆祭 蕾潔 芙莉蓮 渡我",
-      "topProb": 3.38,
+      "topProb": 3.39,
       "origProb": 3.34,
       "price": 150160,
       "url": "https://www.ruten.com.tw/item/52639727330127/"
@@ -69,13 +69,6 @@
       "origProb": 3.08,
       "price": 350,
       "url": "https://www.ruten.com.tw/item/52640808718578/"
-    },
-    {
-      "name": "【三隻貓卡遊】碧藍航線 福利賞 超好看 大鳳 1/4 鎮海 奇奢華苑 杜伊斯堡 光榮 涼夜香雪 春節 PVC Z1",
-      "topProb": 0.72,
-      "origProb": 0.67,
-      "price": 18899,
-      "url": "https://www.ruten.com.tw/item/52639730780827/"
     },
     {
       "name": "【誠格一番】 APEX 碧藍航線 可畏 插畫Ver. 1/7 完成品 PVC D1",
