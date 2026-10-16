@@ -2,17 +2,10 @@
   "winners": [
     {
       "name": "【玩具將軍】女神祭典",
-      "topProb": 5.82,
+      "topProb": 5.89,
       "origProb": 5.5,
       "price": 490,
       "url": "https://www.ruten.com.tw/item/52641839483976/"
-    },
-    {
-      "name": "【幫主子賺罐罐】老婆爽爽抽 女神大亂鬥 vol9",
-      "topProb": 3.3,
-      "origProb": 3.12,
-      "price": 9400,
-      "url": "https://www.ruten.com.tw/item/52641833262650/"
     },
     {
       "name": "【幫主子賺罐罐】老婆爽爽抽 女神大亂鬥vol6",
@@ -22,15 +15,8 @@
       "url": "https://www.ruten.com.tw/item/52636539041427/"
     },
     {
-      "name": "【幫主子賺罐罐】老婆爽爽抽 女神大亂鬥 vol5",
-      "topProb": 11.95,
-      "origProb": 11.54,
-      "price": 5380,
-      "url": "https://www.ruten.com.tw/item/52634414738026/"
-    },
-    {
       "name": "【番魂社】老婆補完計畫 7",
-      "topProb": 4.06,
+      "topProb": 4.2,
       "origProb": 3.89,
       "price": 7420450,
       "url": "https://www.ruten.com.tw/item/52641829732455/"
@@ -41,6 +27,13 @@
       "origProb": 3.34,
       "price": 150160,
       "url": "https://www.ruten.com.tw/item/52639727330127/"
+    },
+    {
+      "name": "【富富景品】富婆賞3  勝利女神妮姬 桃樂絲 Doro 賽馬娘 小栗帽 紫音 碧藍航線 怨仇 惡毒 &mu;兵裝",
+      "topProb": 3.55,
+      "origProb": 3.12,
+      "price": 420,
+      "url": "https://www.ruten.com.tw/item/52639707954453/"
     },
     {
       "name": "【玩具將軍】我婆篇 特集",
@@ -95,7 +88,7 @@
   "overdue": [
     {
       "name": "【玩具將軍】女神祭典",
-      "pullsDone": 29,
+      "pullsDone": 30,
       "avg": 28.6,
       "mainGone": 0,
       "mainTotal": 7,
