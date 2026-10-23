@@ -2,7 +2,7 @@
   "winners": [
     {
       "name": "【玩具將軍】女神祭典",
-      "topProb": 6.0,
+      "topProb": 6.01,
       "origProb": 5.5,
       "price": 490,
       "url": "https://www.ruten.com.tw/item/52641839483976/"
@@ -102,7 +102,7 @@
   "overdue": [
     {
       "name": "【玩具將軍】女神祭典",
-      "pullsDone": 33,
+      "pullsDone": 34,
       "avg": 28.6,
       "mainGone": 0,
       "mainTotal": 7,
