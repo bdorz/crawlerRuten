@@ -2,17 +2,10 @@
   "winners": [
     {
       "name": "【玩具將軍】女神祭典",
-      "topProb": 6.01,
+      "topProb": 6.19,
       "origProb": 5.5,
       "price": 490,
       "url": "https://www.ruten.com.tw/item/52641839483976/"
-    },
-    {
-      "name": "【幫主子賺罐罐】老婆爽爽抽 女神大亂鬥 vol9",
-      "topProb": 3.3,
-      "origProb": 3.12,
-      "price": 9400,
-      "url": "https://www.ruten.com.tw/item/52641833262650/"
     },
     {
       "name": "【幫主子賺罐罐】老婆爽爽抽 女神大亂鬥vol6",
@@ -102,7 +95,7 @@
   "overdue": [
     {
       "name": "【玩具將軍】女神祭典",
-      "pullsDone": 34,
+      "pullsDone": 38,
       "avg": 28.6,
       "mainGone": 0,
       "mainTotal": 7,
