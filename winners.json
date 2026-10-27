@@ -1,8 +1,15 @@
 {
   "winners": [
     {
+      "name": "【玩具將軍】女神降臨 百元抽",
+      "topProb": 99.79,
+      "origProb": 99.78,
+      "price": 100120,
+      "url": "https://www.ruten.com.tw/item/52642894660076/"
+    },
+    {
       "name": "【玩具將軍】女神祭典",
-      "topProb": 6.3,
+      "topProb": 5.85,
       "origProb": 5.5,
       "price": 490,
       "url": "https://www.ruten.com.tw/item/52641839483976/"
@@ -16,7 +23,7 @@
     },
     {
       "name": "【富富景品】富婆賞4 為美好的世界獻上祝福！ 達克妮絲 原作版 睡衣ver.阿克婭 惠惠 泳裝",
-      "topProb": 5.46,
+      "topProb": 5.67,
       "origProb": 5.0,
       "price": 100,
       "url": "https://www.ruten.com.tw/item/52643959172358/"
@@ -92,17 +99,7 @@
       "url": "https://www.ruten.com.tw/item/52634419969027/"
     }
   ],
-  "overdue": [
-    {
-      "name": "【玩具將軍】女神祭典",
-      "pullsDone": 41,
-      "avg": 28.6,
-      "mainGone": 0,
-      "mainTotal": 7,
-      "price": 490,
-      "url": "https://www.ruten.com.tw/item/52641839483976/"
-    }
-  ],
+  "overdue": [],
   "seen_winners": [
     "【一抽露魂】《原神  Genshin》～旅行者的午後~後宮女神大集結～漫畫博覽會限定11",
     "【一抽露魂】《崩壞：星穹鐵道》～漫遊銀河的女神們～漫畫博覽會限定15",
